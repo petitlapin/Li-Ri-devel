@@ -1,0 +1,10 @@
+Initial source of these data can be found at http://prdownloads.sourceforge.net/ri-li/Ri-li-devel-2.0.1.tar.bz2?download
+
+Images can be generated from the POV files using the command `for f in *.ini; do povray $f; done`
+
+The version of povray needs to be 3.6.1 to generate the same images (with a more recent version, they are too bright, maybe some option is now needed, need to check the changelog of povray).
+
+Ideally, the pov files and langues files should be moved to Li-Ri repository and included in the development workflow to generate the png and then the .dat files used at runtime.
+
+The process is:
+pov files generates png, the C++ executable from this repository (which is still using SDL1) uses the png and the langues files to generate the .dat files used by the application.
