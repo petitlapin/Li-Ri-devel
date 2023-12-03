@@ -2,7 +2,8 @@ Initial source of these data can be found at http://prdownloads.sourceforge.net/
 
 Images can be generated from the POV files using the command `for f in *.ini; do povray $f; done`
 
-The version of povray needs to be 3.6.1 to generate the same images (with a more recent version, they are too bright, maybe some option is now needed, need to check the changelog of povray).
+The original images were generated with the official 3.6.1 version of povray.
+I'm regenerating the images by adding a Version tag in them. They differ a bit but should not be noticeable.
 
 Ideally, the pov files and langues files should be moved to Li-Ri repository and included in the development workflow to generate the png and then the .dat files used at runtime.
 
