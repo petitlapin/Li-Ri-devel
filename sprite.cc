@@ -29,8 +29,8 @@
 
 /*** Variables Globales ***/
 /**************************/
+extern SDL_Renderer *sdlRenderer;
 extern SDL_Surface *sdlVideo;
-extern Uint32 FontColor;
 extern FILE *file;
 
 /*** Ecris un word dans le fichier (compatible tout system) ***/
@@ -61,7 +61,7 @@ Sprite::~Sprite(void)
 
 /*** Charge les sprites ***/
 /**************************/
-bool Sprite::Load(char *Nom,char *NomA,int Nombre)
+bool Sprite::Load(const char *Nom,const char *NomA,int Nombre)
 {
   int i,j,x,y,S;
   int LS,HS,bpp;
@@ -70,7 +70,6 @@ bool Sprite::Load(char *Nom,char *NomA,int Nombre)
   char* Provi=new char [strlen(Nom)+80]; // Chaine du nom
   int Fin=strlen(Nom);
   int FinA=0;
-  SDL_VideoInfo *VideoInfo;
   SDL_Surface *Img=NULL;
   SDL_Surface *Ombre=NULL;
 
@@ -79,9 +78,6 @@ bool Sprite::Load(char *Nom,char *NomA,int Nombre)
   N=Nombre; // Nombre de sprites
   Image=new SDL_Surface* [N]; // Alloue les surfaces
   Dim=new s_Dim [N];
-  
-  // Prend les infos video
-  VideoInfo=(SDL_VideoInfo*)SDL_GetVideoInfo();
 
   // Chargement des Sprites Image
   for(i=1;i<=N;i++) {
@@ -234,7 +230,7 @@ bool Sprite::Load(char *Nom,char *NomA,int Nombre)
     
     // Affiche le sprite pour le test
     Affiche(400,300,i-1);
-    SDL_Flip(sdlVideo);
+    SDL_RenderPresent(sdlRenderer);
   }
 
   delete [] Provi; // Libère la mémoire
@@ -260,7 +256,7 @@ bool Sprite::Load(char *Nom,char *NomA,int Nombre)
 
 /*** Charge plusieurs sprites dans un meme sprite ***/
 /****************************************************/
-bool Sprite::LoadCaractaire(char *Nom)
+bool Sprite::LoadCaractaire(const char *Nom)
 {
   int i,j,x,S=0;
   int LS,HS,bpp;
@@ -269,16 +265,12 @@ bool Sprite::LoadCaractaire(char *Nom)
   unsigned char *IB;
   char* Provi=new char [strlen(Nom)+80]; // Chaine du nom
   int Fin=strlen(Nom);
-  SDL_VideoInfo *VideoInfo;
   SDL_Surface *Img=NULL;
     
   Image=new SDL_Surface* [128]; // Alloue les surfaces
   Dim=new s_Dim [128];
   N=0;
 
-  // Prend les infos video
-  VideoInfo=(SDL_VideoInfo*)SDL_GetVideoInfo();
-  
   strcpy(Provi,Nom); // Création du nom
     
   Provi[Fin+4]=0;
@@ -362,7 +354,7 @@ bool Sprite::LoadCaractaire(char *Nom)
 
       // Affiche le sprite
       Affiche(400,300,N-1);
-      SDL_Flip(sdlVideo);
+      SDL_RenderPresent(sdlRenderer);
     }    
   } while(x<LS);
   

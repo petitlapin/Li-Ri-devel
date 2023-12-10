@@ -24,8 +24,8 @@
 #ifndef _SPRITE_DOM_
 #define _SPRITE_DOM_
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #define FCOLOR 128
 #define ALPHA_OMBRE 155
@@ -47,8 +47,8 @@ class Sprite
   ~Sprite(void);
 
   /*** Fonctions ***/
-  bool Load(char *NomImage,char *NomAlpha,int N); // Charge les fichiers au format PNG
-  bool LoadCaractaire(char *NomImage);
+  bool Load(const char *NomImage,const char *NomAlpha,int N); // Charge les fichiers au format PNG
+  bool LoadCaractaire(const char *NomImage);
   void Affiche(int X,int Y,int NumSpr);  // Affiche le sprite
   void Efface(int X,int Y,int NumSpr,SDL_Surface *Fond);   // Efface le sprite
   void Delete(void); // Efface la mémoire du sprite

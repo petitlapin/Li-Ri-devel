@@ -25,8 +25,8 @@ CC=c++
 LINKER=c++
 AR=ar	
 DEBUGOPT= -DLINUX
-COPTS=-O3 -Wall -Wno-switch -Wno-deprecated -ffast-math -I/usr/X11R6/include -I/usr/include $(DEBUGOPT) `sdl-config --cflags`
-LINKOPTS=-L/usr/lib `sdl-config --libs` -lSDL_image
+COPTS=-O3 -Wall -Wno-switch -Wno-deprecated -ffast-math $(DEBUGOPT) `sdl2-config --cflags`
+LINKOPTS=-L/usr/lib `sdl2-config --libs` -lSDL2_image
 
 TARGET=MakeDat
 

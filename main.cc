@@ -23,26 +23,27 @@
 
 #include <stdlib.h>
 #include <iostream>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "sprite.h"
 
 /*** Variables globales ***/
 /**************************/
-SDL_Surface *sdlVideo; // Pointe sur l'écran video
-Uint32 FontColor;      // Couleur du fond d'écran
+SDL_Window *sdlWindow; // Pointe sur l'écran video
+SDL_Renderer *sdlRenderer; // Pointe sur l'écran video
+SDL_Surface *sdlVideo;
 FILE *file;            // Pointe sur le fichier de sauvegarde
 
-char Titre[]="MakeDat V2.0.1";
+char Titre[]="MakeDat V3.0.0";
 
 struct s_Sprite {
-  char *NomF,*NomA;
+  const char *NomF,*NomA;
   int nombre;
   bool Caractaire;
 };
 
-char* Langues[]={"langues/De/","langues/En/","langues/Es/","langues/Fr/","langues/Ar/","langues/Cn/",
+const char* Langues[]={"langues/De/","langues/En/","langues/Es/","langues/Fr/","langues/Ar/","langues/Cn/",
 		 "langues/Jp/","langues/Ru/","langues/Sl/","langues/It/","langues/Br/","langues/Po/",
 		 "langues/Se/","langues/Eo/","langues/Hu/","langues/Tu/","langues/Pl/","langues/Du/",
 		 "langues/Ko/",NULL};
@@ -183,46 +184,25 @@ s_Sprite Sprit[]={
 int main(int narg,char *argv[])
 {
   int i,j,n,nt;
-  char **pTitre=NULL;
-  char **pIcon=NULL;
   char Provi[512];
   char Extension[3];
-  SDL_VideoInfo *sdlVideoInfo;
   Sprite Spr;
   int NL;
   unsigned char Buf[2];
   
   // Initilise SDL
-  if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_AUDIO|SDL_INIT_NOPARACHUTE) < 0 ) {
-    std::cerr <<"Impossible d'initialiser SDL:"<<SDL_GetError()<<std::endl;
+  if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_AUDIO) < 0 ) {
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to initialize SDL: %s", SDL_GetError());
     exit(-1);
   }
   // Ferme le programme correctement quant quit
   atexit(SDL_Quit);
-    
-  // Teste la resolution video
-  sdlVideoInfo=(SDL_VideoInfo*)SDL_GetVideoInfo();
-
-  if(sdlVideoInfo->vfmt->BitsPerPixel==8) {
-    std::cerr <<"Impossible d'utiliser 8bits pour la vidéo !"<<std::endl;
-    exit(-1);
-  }
 
   // Demande la recolution Video
-  int vOption=SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_ASYNCBLIT;
-  //  if(Jeu.Pref.FullScreen) vOption|=SDL_FULLSCREEN;
-  sdlVideo=SDL_SetVideoMode(800,600,sdlVideoInfo->vfmt->BitsPerPixel,vOption);
-
-  if(sdlVideo==NULL) {
-    std::cerr <<"Impossible de passer dans le mode vidéo 800x600 !"<<std::endl;
-    exit(-1);
-  }
-  // Change le nom de la fenetre
-  SDL_WM_GetCaption(pTitre,pIcon);
-  SDL_WM_SetCaption(Titre,NULL);
-
-  // Couleur du font d'écran
-  FontColor=SDL_MapRGB(sdlVideo->format,128,128,128);
+  sdlWindow = SDL_CreateWindow(Titre, 0, 0, 800, 600, 0);
+  sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, 0);
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+  SDL_RenderSetLogicalSize(sdlRenderer, 800, 600);
 
  
   // *** Compte les sprites de décos ***
